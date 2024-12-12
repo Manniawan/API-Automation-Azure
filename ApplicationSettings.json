@@ -1,0 +1,10 @@
+{
+  "Environment": "Data-Review", // Data-Review or Production
+  "EmailTo": "awanehsan123@gmail.com",
+  "EmailCC": "CCMembers123@gmail.com",
+  "DRConnectionString": "Data Source= data-Ehsan.com;Initial Catalog=Test_DB; User ID=TestDB;Password=TestingPassword123",
+  "ProdConnectionString": "",
+  "LoginUserName": "ABCLogin",
+  "LoginPassword": "EFGLOgin123@",
+  "ExePath": "C:\\Users\\Ehsan.Alam\\source\\repos\\CallWebAPI\\CallWebAPI\\bin\\Debug\\netcoreapp3.1"
+}
