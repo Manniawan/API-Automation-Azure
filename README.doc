@@ -1,18 +1,100 @@
- # API Automation Selenium
-
-Playwright Framework
 Azure Pipeline Integration with Database Key Management
 Description
-This project automates the process of retrieving keys from a SQL Server database, using those keys to authenticate with Azure APIs, and triggering Azure pipelines based on the found keys. The script supports both single key and multiple key scenarios, using a loop to iterate through the keys and execute the required Azure pipeline.
-
+•	Automates the retrieval of keys from a SQL Server database.
+•	Uses retrieved keys to authenticate with Azure APIs.
+•	Triggers Azure pipelines based on found keys.
+•	Supports both single and multiple keys using a loop.
+________________________________________
 Prerequisites
-Before you begin, ensure you have the following tools and services set up:
+•	Visual Studio: Required for development and running the project.
+•	SQL Server:
+o	Database containing keys.
+o	Permissions to read from the database.
+•	Azure DevOps:
+o	Azure DevOps organization.
+o	Configured Azure pipelines.
+o	API access and credentials for pipeline triggers.
+•	Git: Required for cloning, committing, and pushing the project.
+________________________________________
+Installation
+1.	Clone the repository:
+bash
+Copy code
+git clone https://github.com/yourusername/yourproject.git  
+cd yourproject  
+2.	Open the project in Visual Studio.
+3.	Dependencies:
+o	Install NuGet packages:
+	System.Data.SqlClient for database access.
+	Azure DevOps SDK or API client libraries.
+4.	Setup Configuration Files:
+o	Create a config.json configuration file.
+Example config.json:
+json
+Copy code
+{  
+  "SqlConnectionString": "Your SQL Server Connection String",  
+  "AzureDevOpsOrganization": "Your Azure DevOps Organization Name",  
+  "AzureDevOpsPipelineId": "Your Azure DevOps Pipeline ID",  
+  "AzureDevOpsPersonalAccessToken": "Your Azure DevOps PAT"  
+}  
+________________________________________
+How to Use
+1.	Fetch keys from the database:
+csharp
+Copy code
+using (SqlConnection conn = new SqlConnection(Configuration["SqlConnectionString"]))  
+{  
+    conn.Open();  
+    SqlCommand cmd = new SqlCommand("SELECT KeyColumn FROM YourTable WHERE IsActive = 1", conn);  
+    SqlDataReader reader = cmd.ExecuteReader();  
+    
+    while (reader.Read())  
+    {  
+        string key = reader["KeyColumn"].ToString();  
+        CallAzureApiAndTriggerPipeline(key);  // Method to execute Azure API  
+    }  
+}  
+2.	Call Azure API:
+csharp
+Copy code
+private void CallAzureApiAndTriggerPipeline(string key)  
+{  
+    // Azure API call logic to authenticate and trigger pipeline  
+    string token = Configuration["AzureDevOpsPersonalAccessToken"];  
+    string pipelineId = Configuration["AzureDevOpsPipelineId"];  
+    
+    HttpClient client = new HttpClient();  
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);  
+    
+    var response = client.PostAsync($"https://dev.azure.com/{Configuration["AzureDevOpsOrganization"]}/_apis/pipelines/{pipelineId}/runs?api-version=6.0", new StringContent("{}")).Result;  
+    
+    if (response.IsSuccessStatusCode)  
+    {  
+        Console.WriteLine("Pipeline triggered successfully.");  
+    }  
+    else  
+    {  
+        Console.WriteLine("Failed to trigger pipeline.");  
+    }  
+}  
+3.	Loop through multiple keys if necessary:
+csharp
+Copy code
+while (reader.Read())  
+{  
+    string key = reader["KeyColumn"].ToString();  
+    CallAzureApiAndTriggerPipeline(key);  
+}  
+________________________________________
+Usage Notes
+•	Ensure the database connection string and Azure DevOps token are stored securely.
+•	Verify Azure DevOps organization and pipeline IDs are correctly configured.
+________________________________________
+Contributing
+•	Fork the repository.
+•	Make your changes.
+•	Submit a pull request.
 
-Visual Studio (for development and running the project).
-SQL Server:
-A SQL Server database containing the keys.
-Appropriate permissions to read from the database.
-Azure DevOps:
-An Azure DevOps organization with at least one Azure pipeline configured.
-Access to the pipeline APIs and credentials to trigger pipelines.
+
 
