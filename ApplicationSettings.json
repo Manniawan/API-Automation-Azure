@@ -1,5 +1,5 @@
 {
-  "Environment": "Data-Review", // Data-Review or Production
+  "Environment": "Staging", 
   "EmailTo": "awanehsan123@gmail.com",
   "EmailCC": "CCMembers123@gmail.com",
   "DRConnectionString": "Data Source= data-Ehsan.com;Initial Catalog=Test_DB; User ID=TestDB;Password=TestingPassword123",
